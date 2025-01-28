@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "iccps_rep"
+version = "0.1.0-alpha.1"
+description = "ICCPS reproducibility for aerial trust experiments"
+authors = ["Spencer Hallyburton <spencer@shally.dev>"]
+readme = "README.md"
+license = "MIT License"
+repository = "https://github.com/cpsl-research/iccps-2025-multi-agent-rep.git"
+keywords = ["computer vision", "perception", "tracking", "uav", "security"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+]
+
+[tool.poetry.dependencies]
+python = "~3.10"
+
+# AVSTACK PACKAGES
+lib-avstack-api = {path="./submodules/lib-avstack-api", develop=true}
+lib-avstack-core = {path="./submodules/lib-avstack-core", extras=["percep"], develop=true}
+lib-avstack-security = {path="./submodules/lib-avstack-security", develop=true}
+lib-avstack-trust = {path="./submodules/lib-avstack-trust", develop=true}
+
+[tool.poetry.group.test.dependencies]
+snakeviz="^2.1.1"
+pytest = "^7"
+pytest-cov = "^4"
+bandit = "^1.7"
+black = {extras = ["jupyter"], version = "~22.12.0"}
+mypy = "^0"
+isort = "^5.11"
+flake8 = "^5.0"
+autoflake = "^1"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q -s"
+testpaths = [
+    "tests",
+    "integration",
+]
+
+[build-system]
+requires = [
+    "poetry-core",
+]
+build-backend = "poetry.core.masonry.api"

@@ -11,9 +11,9 @@ MODELFOLDER=${MODELFOLDER%/}  # remove trailing slash
 xhost local:root
 
 # this for remote docker image
-# DOCKERNAME="roshambo919/iccps25:aerial-trust"
+DOCKERNAME="roshambo919/iccps25:aerial-trust"
 # this for local docker image
-DOCKERNAME="aerial-trust"
+# DOCKERNAME="aerial-trust"
 
 # pull docker image (if using local image, comment out)
 # docker pull $DOCKERNAME

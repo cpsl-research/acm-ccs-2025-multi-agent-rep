@@ -469,6 +469,13 @@ def run_experiment(
                 inplace=False,
             )
 
+            # filter the tracks to only ones viewed by > 1 agent
+            # TODO
+
+            # filter the agents to only those with any overlap
+            # TODO
+
+
             # -------------------------------------------------
             # assignment metrics
             # -------------------------------------------------

@@ -63,8 +63,8 @@ def make_trust_metric_meta_plot(
     plt.tight_layout()
 
     # save figure
-    plt.savefig(os.path.join(fig_dir, fig_title + ".pdf"))
-    plt.savefig(os.path.join(fig_dir, fig_title + ".png"))
+    plt.savefig(os.path.join(fig_dir, fig_title + ".pdf"), metadata={'CreationDate': None})
+    plt.savefig(os.path.join(fig_dir, fig_title + ".png"), metadata={'CreationDate': None})
     plt.show()
 
 
@@ -123,8 +123,8 @@ def make_assignment_metric_meta_plot(
     plt.tight_layout()
 
     # save figure
-    plt.savefig(os.path.join(fig_dir, fig_title + ".pdf"))
-    plt.savefig(os.path.join(fig_dir, fig_title + ".png"))
+    plt.savefig(os.path.join(fig_dir, fig_title + ".pdf"), metadata={'CreationDate': None})
+    plt.savefig(os.path.join(fig_dir, fig_title + ".png"), metadata={'CreationDate': None})
     plt.show()
 
 
@@ -176,6 +176,7 @@ def make_plot_for_case_assignment(metrics, fig_title: str, fig_dir: str):
             y=y,
             data=df_metrics,
             label=label,
+            linewidth=3,
         )
 
     # Add labels, title, and grid
@@ -186,8 +187,8 @@ def make_plot_for_case_assignment(metrics, fig_title: str, fig_dir: str):
     plt.legend(prop={"family": font_family})
     plt.grid(True)
     plt.tight_layout()
-    plt.savefig(os.path.join(fig_dir, fig_title + ".pdf"))
-    plt.savefig(os.path.join(fig_dir, fig_title + ".png"))
+    plt.savefig(os.path.join(fig_dir, fig_title + ".pdf"), metadata={'CreationDate': None})
+    plt.savefig(os.path.join(fig_dir, fig_title + ".png"), metadata={'CreationDate': None})
 
     plt.show()
 
@@ -227,8 +228,8 @@ def make_plot_for_case_trust_metric(metrics, fig_title: str, fig_dir: str):
     plt.legend(prop={"family": font_family})
     plt.grid(True)
     plt.tight_layout()
-    plt.savefig(os.path.join(fig_dir, fig_title + ".pdf"))
-    plt.savefig(os.path.join(fig_dir, fig_title + ".png"))
+    plt.savefig(os.path.join(fig_dir, fig_title + ".pdf"), metadata={'CreationDate': None})
+    plt.savefig(os.path.join(fig_dir, fig_title + ".png"), metadata={'CreationDate': None})
 
     plt.show()
 
@@ -252,7 +253,7 @@ def plot_last_trust_distributions(all_diag, fig_title: str, fig_dir: str):
         # save figure
         plt.tight_layout()
         fig_title_agent = fig_title + f"agent_{idx_agent}"
-        plt.savefig(os.path.join(fig_dir, fig_title_agent + ".pdf"))
-        plt.savefig(os.path.join(fig_dir, fig_title_agent + ".png"))
+        plt.savefig(os.path.join(fig_dir, fig_title_agent + ".pdf"), metadata={'CreationDate': None})
+        plt.savefig(os.path.join(fig_dir, fig_title_agent + ".png"), metadata={'CreationDate': None})
 
         plt.show()

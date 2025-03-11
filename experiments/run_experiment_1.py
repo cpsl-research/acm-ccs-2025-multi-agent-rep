@@ -11,7 +11,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--exp_dir", type=str, default="outputs")
     parser.add_argument(
-        "--data_dir", type=str, default="../data/multi-agent-aerial-dense"
+        "--data_dir", type=str, default="../data/multi-agent-aerial-dense/raw"
     )
     parser.add_argument("--min_agents", type=int, default=6)
     parser.add_argument("--max_agents", type=int, default=51)

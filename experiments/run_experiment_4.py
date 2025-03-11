@@ -10,7 +10,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--exp_dir", type=str, default="outputs")
     parser.add_argument(
-        "--data_dir", type=str, default="../data/multi-agent-aerial-dense"
+        "--data_dir", type=str, default="../data/multi-agent-aerial-dense/raw"
     )
     parser.add_argument("--n_agents", type=int, default=25)
     parser.add_argument("--n_frames", type=int, default=50)

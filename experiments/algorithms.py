@@ -204,6 +204,8 @@ def run_experiment(
     n_frames_trust_burnin: int = 5,
     d_comms: int = 40,
     data_dir="/data/shared/CARLA/multi-agent-aerial-dense/raw",
+    filter_trust_metrics_tracks: bool = False,
+    filter_trust_metrics_agents: bool = False,
     with_diagnostics: bool = False,
 ):
     """Run the trust experiments"""
@@ -418,7 +420,7 @@ def run_experiment(
         # compute metrics for each agent
         for agent_metrics in agents:
 
-            # -- objects viewable by only this agent
+            # -- objects visible by only this agent
             agent_tracks_self = tracks_3d[agent_metrics.ID]
             agent_tracks_fused = fused_3d[agent_metrics.ID].filter(
                 partial(
@@ -427,12 +429,9 @@ def run_experiment(
                     last_imgs[agent_metrics.ID].calibration,
                 )
             )
-            # for track in agent_tracks_fused:
-            #     print(trust_tracks[agent_metrics.ID][track.ID].mean)
             agent_tracks_fused_filter = agent_tracks_fused.filter(
                 lambda x: trust_tracks[agent_metrics.ID][x.ID].mean >= 0.5,
             )
-            # print(len(agent_tracks_fused) - len(agent_tracks_fused_filter))
 
             # preallocate metrics datastructure
             metrics = {
@@ -468,13 +467,6 @@ def run_experiment(
                 GlobalOrigin3D,
                 inplace=False,
             )
-
-            # filter the tracks to only ones viewed by > 1 agent
-            # TODO
-
-            # filter the agents to only those with any overlap
-            # TODO
-
 
             # -------------------------------------------------
             # assignment metrics
@@ -516,22 +508,70 @@ def run_experiment(
             # -------------------------------------------------
 
             if trust_agents[agent_metrics.ID] is not None:
-                # metrics on the agent trust estimation (local info)
+
+                # filter track trust considered to only those visible by >1
+                if filter_trust_metrics_tracks:
+                    # get the subset of tracks visible by >1 agent
+                    def get_tracks_visible_by(fovs: dict, calibs: dict, n_min: int, track):
+                        n_viz = 0
+                        for ID_agent in fovs:
+                            if track_in_fov(fovs[ID_agent], calibs[ID_agent], track):
+                                n_viz += 1
+                            if n_viz >= n_min:
+                                return True
+                        return False
+                    calib_agents = {ID: last_imgs[ID].calibration for ID in fov_agents}
+                    partial_tracks_visible = partial(get_tracks_visible_by, fov_agents, calib_agents, 2)
+                    agent_tracks_self_for_trust = agent_tracks_self.filter(partial_tracks_visible)
+                    agent_tracks_fused_for_trust = agent_tracks_fused.filter(partial_tracks_visible)
+                    tracks_truth_global_for_trust = tracks_truth_global.filter(partial_tracks_visible)
+                    agent_tracks_fused_IDs = [track.ID for track in agent_tracks_fused_for_trust]
+                    trust_tracks_for_metrics = {
+                        ID: trust 
+                        for ID, trust in trust_tracks[agent_metrics.ID].items() 
+                        if ID in agent_tracks_fused_IDs
+                    }
+                else:
+                    # standard, no filtering
+                    agent_tracks_self_for_trust = agent_tracks_self
+                    agent_tracks_fused_for_trust = agent_tracks_fused
+                    tracks_truth_global_for_trust = tracks_truth_global
+                    trust_tracks_for_metrics = trust_tracks[agent_metrics.ID]
+
+                # filter the agents for metrics to only those with any overlap
+                if filter_trust_metrics_agents:
+                    # get the subset of agents with any fov overlap to this agent
+                    agents_w_overlap = set()
+                    for agent_ID in fov_agents:
+                        if fov_agents[agent_ID].intersects(fov_agents[agent_metrics.ID]):
+                            agents_w_overlap.add(agent_ID)
+
+                    # filter to only the agents with overlap
+                    trust_agents_for_metrics = {
+                        ID: trust 
+                        for ID, trust in trust_agents[agent_metrics.ID].items() 
+                        if ID in agents_w_overlap
+                    }
+                else:
+                    # standard, no filtering
+                    trust_agents_for_metrics = trust_agents[agent_metrics.ID]
+
+                # agent trust metrics
                 agent_trust_metrics = get_trust_agents_metrics(
-                    truths_agents=tracks_truth_global,
-                    tracks_agents=agent_tracks_self,
-                    trust_agents=trust_agents[agent_metrics.ID],
+                    truths_agents=tracks_truth_global_for_trust,
+                    tracks_agents=agent_tracks_self_for_trust,
+                    trust_agents=trust_agents_for_metrics,
                     attacked_agents=set(),
                     assign_radius=2.0,
                     use_f1_threshold=False,
                 )
                 metrics["trust-agents"] = agent_trust_metrics
 
-                # -- global
+                # track trust metrics
                 track_trust_metrics = get_trust_tracks_metrics(
-                    truths=tracks_truth_global,
-                    tracks_cc=agent_tracks_fused,
-                    trust_tracks=trust_tracks[agent_metrics.ID],
+                    truths=tracks_truth_global_for_trust,
+                    tracks_cc=agent_tracks_fused_for_trust,
+                    trust_tracks=trust_tracks_for_metrics,
                     assign_radius=2.0,
                 )
                 metrics["trust-tracks"] = track_trust_metrics

@@ -28,6 +28,8 @@ if __name__ == "__main__":
         pct_fn_attacked=0.0,
         strong_prior_unattacked=args.with_prior,
         n_frames_trust_burnin=5,
+        filter_trust_metrics_tracks=True,
+        filter_trust_metrics_agents=True,
     )
 
     # save the results

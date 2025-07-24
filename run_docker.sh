@@ -2,8 +2,8 @@
 
 set -e 
 
-DATAFOLDER=${1:-"/data/test-iccps/data"}
-MODELFOLDER=${2:-"/data/test-iccps/models"}
+DATAFOLDER=${1:-"/data/test-ccs/data"}
+MODELFOLDER=${2:-"/data/test-ccs/models"}
 
 DATAFOLDER=${DATAFOLDER%/}  # remove trailing slash
 MODELFOLDER=${MODELFOLDER%/}  # remove trailing slash
@@ -11,9 +11,9 @@ MODELFOLDER=${MODELFOLDER%/}  # remove trailing slash
 xhost local:root
 
 # this for remote docker image
-DOCKERNAME="roshambo919/iccps25:aerial-trust"
+DOCKERNAME="roshambo919/ccs25:multi-agent-trust"
 # this for local docker image
-# DOCKERNAME="aerial-trust"
+# DOCKERNAME="multi-agent-trust"
 
 # pull docker image (if using local image, comment out)
 # docker pull $DOCKERNAME
@@ -39,7 +39,7 @@ start_docker () {
     MF=$2sw
     echo "Starting fresh docker container"
     docker run \
-      --name aerial-trust \
+      --name multi-agent-trust \
       --privileged \
       --runtime=nvidia \
       --gpus 'all,"capabilities=graphics,utility,display,video,compute"' \
@@ -47,12 +47,12 @@ start_docker () {
       --mount type=bind,src="$MODELFOLDER",target=/models \
       -p 8888:8888 \
       $DOCKERNAME \
-       /bin/bash -c "bash run_setup.sh /data /models && poetry run jupyter notebook --ip 0.0.0.0 --no-browser --allow-root"
+       /bin/bash -c "bash run_setup.sh /data /models && uv run jupyter notebook --ip 0.0.0.0 --no-browser --allow-root"
 }
 
 
 # Remove if there is existing container
-CONT_ID=$(docker ps -aqf "name=^aerial-trust")
+CONT_ID=$(docker ps -aqf "name=^multi-agent-trust")
 if [ "$CONT_ID" == "" ];
 then
 	:

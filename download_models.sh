@@ -2,7 +2,7 @@
 
 set -e
 
-SAVEFOLDER=${1:-"/data/test-iccps/models"}
+SAVEFOLDER=${1:-"/data/test-ccs/models"}
 SAVEFOLDER=${SAVEFOLDER%/}  # remove trailing slash
 SAVEFOLDER="$SAVEFOLDER/mmdet"
 
@@ -50,6 +50,12 @@ download_custom_models () {
 }
 
 
+# lidar point cloud models
+CARLAJOINT_PILLARS=""
+
+
+
+# faster rcnn models
 CARLAJOINT_FRCNN="faster_rcnn_r50_fpn_1x_carla_joint"
 download_custom_models "faster_rcnn_r50_fpn_1x_carla_joint" "carla" "$CARLAJOINT_FRCNN"
 
@@ -60,5 +66,5 @@ echo "$CKPT_PATH/faster_rcnn_r50_fpn_1x_carla_joint.pth" > "$CKPT_PATH/last_chec
 
 # make symbolic links
 echo "Adding symbolic link to mmdet directory"
-ln -sfnT $(realpath "$MMDET_CKPT") "$THISDIR/submodules/lib-avstack-core/third_party/mmdetection/checkpoints"
-ln -sfnT $(realpath "$MMDET_WKDIR") "$THISDIR/submodules/lib-avstack-core/third_party/mmdetection/work_dirs"
+ln -sfnT $(realpath "$MMDET_CKPT") "$THISDIR/submodules/avstack-core/third_party/mmdetection/checkpoints"
+ln -sfnT $(realpath "$MMDET_WKDIR") "$THISDIR/submodules/avstack-core/third_party/mmdetection/work_dirs"

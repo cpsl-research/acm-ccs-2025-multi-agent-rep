@@ -1,12 +1,12 @@
-[submodule "submodules/lib-avstack-api"]
-	path = submodules/lib-avstack-api
-	url = https://github.com/avstack-lab/lib-avstack-api
-[submodule "submodules/lib-avstack-core"]
-	path = submodules/lib-avstack-core
-	url = https://github.com/avstack-lab/lib-avstack-core
-[submodule "submodules/lib-avstack-trust"]
-	path = submodules/lib-avstack-trust
-	url = https://github.com/cpsl-research/lib-avstack-trust
-[submodule "submodules/lib-avstack-security"]
-	path = submodules/lib-avstack-security
-	url = https://github.com/cpsl-research/lib-avstack-security
+[submodule "submodules/avstack-api"]
+	path = submodules/avstack-api
+	url = https://github.com/avstack-lab/avstack-api
+[submodule "submodules/avstack-core"]
+	path = submodules/avstack-core
+	url = https://github.com/avstack-lab/avstack-core
+[submodule "submodules/avstack-trust"]
+	path = submodules/avstack-trust
+	url = https://github.com/cpsl-research/avstack-trust
+[submodule "submodules/avstack-security"]
+	path = submodules/avstack-security
+	url = https://github.com/cpsl-research/avstack-security

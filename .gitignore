@@ -1,3 +1,4 @@
+data
 packages/*.whl
 .vscode
 *.ipynb_checkpoints

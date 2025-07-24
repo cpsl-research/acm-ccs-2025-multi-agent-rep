@@ -2,8 +2,8 @@
 
 set -e
 
-VERSION=${1:-"multi-agent-aerial-dense"}
-DATAFOLDER=${2:-"/data/test-iccps/data"}
+VERSION=${1:-"multi-agent-intersection"}
+DATAFOLDER=${2:-"/data/test-ccs/data"}
 MAXFILES=${3:-10}
 
 DATAFOLDER=${DATAFOLDER%/}  # remove trailing slash
@@ -11,23 +11,23 @@ DATAFOLDER=${DATAFOLDER%/}  # remove trailing slash
 
 DOWNLOAD="https://g-b0ef78.1d0d8d.03c0.data.globus.org/datasets/carla"
 
-if [ "$VERSION" = "multi-agent-aerial-dense" ]; then
-    echo "Preparing to download multi-agent-aerial-dense dataset..."
-    SAVESUB="multi-agent-aerial-dense"
-    SUBDIR="multi-agent-aerial-dense"
+if [ "$VERSION" = "multi-agent-intersection" ]; then
+    echo "Preparing to download multi-agent-intersection dataset..."
+    SAVESUB="multi-agent-intersection"
+    SUBDIR="multi-agent-intersection"
     files=(
-        "run-2024-11-12_20:41:57,1vHw2Bm3K6ClBoor0XdEPLXxCun2t2ze0"
-        "run-2024-11-12_20:46:41,17RIwCSdYX2onhurMo0lRlCzuICb1kxsi"
-        "run-2024-11-12_20:51:25,1vH9VDHIGToA_qcYxksN2J0Q_v_fnOg3q"
+        "run-2024-04-23_22:32:13-intersection,1e6xaX-5yQHwQ3JCxDrHZ-m4d3dT9fiKm"
+        "run-2024-04-23_23:04:15-intersection,1ANXPb-n-0Mxuybqvc5HQTyjIyYiJdZ0D"
+        "run-2024-04-23_23:06:00-intersection,1rfqNAJf0_mDkjZd90AFOzaDSZcdoMptO"
     )
 else
-    echo "Cannot understand input version ${VERSION}! Currently can only use 'multi-agent-v1'"
+    echo "Cannot understand input version ${VERSION}! Currently can only use 'multi-agent-intersection'"
 fi
 
 SAVEFULL="${DATAFOLDER}/${SAVESUB}"
 mkdir -p $SAVEFULL
 
-echo "Downloading up to $MAXFILES files"
+echo "Downloading files"
 COUNT=0
 
 for FILE in ${files[@]}; do
@@ -42,8 +42,8 @@ for FILE in ${files[@]}; do
     # get file/folder names
     shortname="${NAME}.tar.gz"
     fullname="${SAVEFULL}/${shortname}"
-    F_REP="${NAME//-/:}"
-    evidence="${SAVEFULL}/${F_REP}/.full_download"
+    # F_REP="${NAME//-/:}"
+    evidence="${SAVEFULL}/${NAME}/.full_download"
 
     # -- check for evidence of full download
     if [ -f "$evidence" ]; then
@@ -52,18 +52,19 @@ for FILE in ${files[@]}; do
     elif [ -f "$DOWNLOAD/$SAVESUB/$shortname" ]; then
         echo -e "$shortname exists...unzipping\n"
         tar -xvf "$fullname" -C "$SAVEFULL" --force-local
-        mv "$DATAFOLDER/$SAVESUB/$SUBDIR/$FILE" "$DATAFOLDER/$SAVESUB/$FILE"  # this is a result of a saving error previously
+        mv "$DATAFOLDER/$SAVESUB/$SUBDIR/$NAME" "$DATAFOLDER/$SAVESUB/$NAME"  # this is a result of a saving error previously
         rm -r "$DATAFOLDER/$SAVESUB/$SUBDIR"
-        rm "$DATAFOLDER/$SAVESUB/${FILE}.tar.gz"
+        rm "$DATAFOLDER/$SAVESUB/${NAME}.tar.gz"
     # -- otherwise, download again
     else
-        echo "Downloading ${shortname}"
+        echo "Downloading ${shortname} to output at ${fullname}"
         # wget -P "$SAVEFULL" "$DOWNLOAD/$SAVESUB/$shortname"
-        gdown --id $FID -O $SAVEFULL
+        # wget -P "$SAVEFULL" "https://drive.usercontent.google.com/download?export=download&confirm=t&id=${FID}"
+        gdown --id $FID -O $fullname
         tar -xvf "$fullname" -C "$SAVEFULL" --force-local
-        mv "$DATAFOLDER/$SAVESUB/$SUBDIR/$F_REP" "$DATAFOLDER/$SAVESUB/$F_REP"  # this is a result of a saving error previously
+        mv "$DATAFOLDER/$SAVESUB/$SUBDIR/$NAME" "$DATAFOLDER/$SAVESUB/$NAME"  # this is a result of a saving error previously
         rm -r "$DATAFOLDER/$SAVESUB/$SUBDIR"
-        rm "$DATAFOLDER/$SAVESUB/${FILE}.tar.gz"
+        rm "$DATAFOLDER/$SAVESUB/${NAME}.tar.gz"
     fi
     
     # -- add evidence of successful download
@@ -71,7 +72,7 @@ for FILE in ${files[@]}; do
 
     # -- check downloads
     COUNT=$((COUNT+1))
-    echo "Downloaded $COUNT / $MAXFILES files!"
+    echo "Downloaded $COUNT files!"
     if [[ $COUNT -ge $MAXFILES ]]; then
             echo "Finished downloading $COUNT files"
             break

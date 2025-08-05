@@ -11,9 +11,9 @@ MODELFOLDER=${MODELFOLDER%/}  # remove trailing slash
 xhost local:root
 
 # this for remote docker image
-DOCKERNAME="roshambo919/ccs25:multi-agent-trust"
+# DOCKERNAME="roshambo919/ccs25:multi-agent-trust"
 # this for local docker image
-# DOCKERNAME="multi-agent-trust"
+DOCKERNAME="multi-agent-trust"
 
 # pull docker image (if using local image, comment out)
 # docker pull $DOCKERNAME

@@ -309,10 +309,27 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "avstack-api", directory = "submodules/avstack-api" },
-    { name = "avstack-core", directory = "submodules/avstack-core" },
-    { name = "numpy", specifier = ">=1.19,<2.0" },
-    { name = "scipy", specifier = ">=1.8.0,<2.0.0" },
+    { name = "avstack-api", editable = "submodules/avstack-api" },
+    { name = "avstack-core", editable = "submodules/avstack-core" },
+    { name = "numpy", specifier = "~=1.19" },
+    { name = "scipy", specifier = ">=1.8.0,<2" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "jupyter", specifier = ">=1.0.0,<2" },
+    { name = "seaborn", specifier = ">=0.12" },
+]
+test = [
+    { name = "autoflake", specifier = ">=1,<2" },
+    { name = "bandit", specifier = "~=1.7" },
+    { name = "black", extras = ["jupyter"], specifier = "~=22.12.0" },
+    { name = "flake8", specifier = "~=5.0" },
+    { name = "isort", specifier = "~=5.11" },
+    { name = "mypy", specifier = ">=0,<1" },
+    { name = "pytest", specifier = ">=7,<8" },
+    { name = "pytest-cov", specifier = ">=4,<5" },
+    { name = "snakeviz", specifier = ">=2.1.1,<3" },
 ]
 
 [[package]]
@@ -329,11 +346,24 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "avstack-core", directory = "submodules/avstack-core" },
-    { name = "matplotlib", specifier = ">=3.9.0,<4.0.0" },
-    { name = "matplotlib-label-lines", specifier = ">=0.7.0,<0.8.0" },
-    { name = "pymc", specifier = ">=5.10.4,<5.11.0" },
+    { name = "avstack-core", editable = "submodules/avstack-core" },
+    { name = "matplotlib", specifier = ">=3.9.0,<4" },
+    { name = "matplotlib-label-lines", specifier = "~=0.7.0" },
+    { name = "pymc", specifier = "~=5.10.4" },
     { name = "pyqt5", specifier = "==5.15.2" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "ipykernel", specifier = ">=6.28.0,<7" }]
+test = [
+    { name = "autoflake", specifier = ">=1,<2" },
+    { name = "bandit", specifier = "~=1.7" },
+    { name = "black", specifier = "~=22.12.0" },
+    { name = "flake8", specifier = "~=5.0" },
+    { name = "isort", specifier = "~=5.11" },
+    { name = "mypy", specifier = ">=0,<1" },
+    { name = "pytest", specifier = ">=7,<8" },
+    { name = "pytest-cov", specifier = ">=4,<5" },
 ]
 
 [[package]]
